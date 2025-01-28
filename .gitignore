@@ -1,0 +1,35 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Diretórios de build
+/dist
+/build
+
+# Dependências específicas de editor
+.vscode/
+.idea/
+
+# Arquivos de configuração do ambiente
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Cache de pacotes
+.pnp/
+.pnp.js
+
+# Arquivos temporários
+*.swp
+*.swo
+
+# Arquivos de compilação
+*.tsbuildinfo
