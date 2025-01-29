@@ -2,6 +2,7 @@ const express = require('express');
 const conn = require('./db/conn');
 
 const app = express();
+app.use(express.json());
 
 const helloRoutes = require('./routes/helloworld_route');
 

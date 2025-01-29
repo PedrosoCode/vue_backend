@@ -11,7 +11,7 @@ const createHelloWorld = async (req, res) => {
 
   try {
     const sql = 'INSERT INTO tb_hello (hi) VALUES (:hello)';
-    const [result] = await conn.execute(sql, { hello });
+    const [result] = await conn.query(sql, { replacements: { hello } });
 
     res.status(201).json({
       message: 'Hello criado com sucesso!',
