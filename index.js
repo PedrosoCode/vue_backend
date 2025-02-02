@@ -4,9 +4,12 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const bodyParser = require('body-parser')
+const dotenv = require('dotenv')
 
 const app = express();
 app.use(express.json());
+require('dotenv').config();
+
 
 const helloRoutes = require('./routes/helloworld_route');
 const loginSignupRoutes = require('./routes/loginSignUp_route');

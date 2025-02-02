@@ -16,12 +16,12 @@ logs/
 .vscode/
 .idea/
 
-# Arquivos de configuração do ambiente
-.env
-.env.local
-.env.development
-.env.test
-.env.production
+# Arquivos de configuração do ambiente -- Descomentados de propósito para fins de exibição, idealmente essas informações sensíveis não devem ser compartilhadas
+# .env
+# .env.local
+# .env.development
+# .env.test
+# .env.production
 
 # Cache de pacotes
 .pnp/
