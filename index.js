@@ -13,12 +13,14 @@ require('dotenv').config();
 
 const helloRoutes = require('./routes/helloworld_route');
 const loginSignupRoutes = require('./routes/loginSignUp_route');
+const genericRoutes = require('./routes/generic_route');
 
 app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/hey', helloRoutes);
 app.use('/loginsignup', loginSignupRoutes);
+app.use('/genericos', genericRoutes);
 
 
 app.listen(3042, () => {
