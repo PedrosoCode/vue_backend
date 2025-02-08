@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router.get('/pais', getPais);
-router.get('/cidade', getCidade);
+router.post('/cidade', getCidade);
 router.get('/estado', getEstado);
 
 module.exports = router;

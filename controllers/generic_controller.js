@@ -17,20 +17,32 @@ const getPais = async (req, res) => {
 };
 
 const getCidade = async (req, res) => {
-    try {
-  
-      const results = await conn.query('CALL sp_stc_combo_cidade(NULL)');
-  
-      if (!results || results.length === 0) {
-        return res.status(404).json({ error: 'Nenhuma cidade encontrada.' });
-      }
-  
-      res.status(200).json(results);
-    } catch (err) {
-      console.error('Erro ao buscar cidade:', err);
-      res.status(500).json({ error: 'Erro ao buscar cidades no banco de dados.' });
+  try {
+    let { nCodigoEstado } = req.body;
+
+    if (nCodigoEstado === undefined) {
+      nCodigoEstado = null
     }
-  };
+
+    const execQuery = `CALL sp_stc_combo_cidade(:p_codigo_estado)`;
+
+    const results = await conn.query(execQuery, {
+      replacements: {
+        p_codigo_estado: nCodigoEstado,
+      }
+    });
+
+    if (!results || results.length === 0) {
+      return res.status(404).json({ error: 'Nenhuma cidade encontrada.' });
+    }
+
+    return res.status(200).json(results);
+  } catch (err) {
+    console.error('Erro ao buscar cidade:', err);
+    return res.status(500).json({ error: 'Erro ao buscar cidades no banco de dados.' });
+  }
+};
+
 
   const getEstado = async (req, res) => {
     try {
