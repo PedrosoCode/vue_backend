@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/hey', helloRoutes);
 app.use('/loginsignup', loginSignupRoutes);
 app.use('/genericos', genericRoutes);
+// app.use('/cadparceiros', cadParceiroRoutes);
 
 
 app.listen(3042, () => {

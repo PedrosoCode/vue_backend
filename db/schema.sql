@@ -242,6 +242,297 @@ LOCK TABLES `tb_stc_tipo_parceiro_negocio` WRITE;
 INSERT INTO `tb_stc_tipo_parceiro_negocio` VALUES (1,'A','Ambos'),(2,'C','Cliente'),(3,'F','Fornecedor');
 /*!40000 ALTER TABLE `tb_stc_tipo_parceiro_negocio` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'vue_cmms'
+--
+
+--
+-- Dumping routines for database 'vue_cmms'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `sp_create_hello` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_create_hello`(IN p_hello VARCHAR(255))
+BEGIN
+    INSERT INTO tb_hello (hi) VALUES (p_hello);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_get_hellos` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_hellos`()
+BEGIN
+    SELECT * FROM tb_hello;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_insert_login_signup_cadastro` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_login_signup_cadastro`(
+	p_codigo_empresa 	INT,  
+	p_nome_usuario 		VARCHAR(255),
+    p_email 			VARCHAR(255),
+    p_senha 			VARCHAR(255)
+)
+BEGIN
+
+	DECLARE v_codigo INT;
+
+	SET v_codigo = (
+					SELECT 
+						COALESCE(MAX(codigo), 0) + 1
+					FROM tb_cad_usuario 
+					WHERE codigo_empresa = p_codigo_empresa
+				   );
+
+	INSERT INTO tb_cad_usuario
+		(codigo,
+		nome_usuario,
+		email,
+		senha,
+		codigo_empresa)
+	VALUES
+		(v_codigo,
+		p_nome_usuario,  
+		p_email,
+		p_senha,
+		p_codigo_empresa);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_select_login_signup_combo_empresa` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_login_signup_combo_empresa`()
+BEGIN
+
+	SELECT * from tb_cad_empresa;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_select_parceiro_negocio` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_parceiro_negocio`()
+BEGIN
+    SELECT 
+        tb_cad_parceiro_negocio.codigo AS nCodigoCidadeParceiro,
+        tb_cad_parceiro_negocio.codigo_empresa AS nCodigoEmpresaParceiro,
+        tb_cad_parceiro_negocio.documento AS sDocumentoParceiro,
+        tb_cad_parceiro_negocio.telefone as sTelefoneParceiro,
+        tb_cad_parceiro_negocio.email AS sEmailParceiro,
+        tb_cad_parceiro_negocio.data_cadastro AS sDataCadastroParceiro,
+        tb_cad_parceiro_negocio.nome_fantasia AS sNomeFantasiaParceiro,
+        tb_cad_parceiro_negocio.razao_social AS sRazaoSocialParceiro,
+        tb_cad_parceiro_negocio.logradouro AS sLogradouro,
+        tb_cad_parceiro_negocio.numero AS sNumeroParceiro,
+        tb_cad_parceiro_negocio.complemento AS sComplementoParceiro,
+        tb_cad_parceiro_negocio.bairro AS sBairroParceiro,
+        tb_cad_parceiro_negocio.cep AS sCepParceiro,
+        tb_cad_parceiro_negocio.contato AS sContatoParceiro,
+        tb_cad_parceiro_negocio.codigo_pais AS nCodigoPaisParceiro,
+        tb_cad_parceiro_negocio.codigo_cidade AS nCodigoEstadoParceiro,
+        tb_cad_parceiro_negocio.codigo_tipo_parceiro AS nCodigoTipoParceiro,
+        tb_cad_parceiro_negocio.data_ultima_alteracao AS sDataUltimaAlteracao,
+        CONCAT(cidade.nome, ' - ', estado.uf) AS sDescricaoCidade,
+        cidade.nome AS sNomeCidadeParceiro,
+        estado.nome AS sNomeEstadoParceiro,
+        pais.nome_pt AS sNomePT
+    FROM tb_cad_parceiro_negocio
+    LEFT JOIN pais
+    ON pais.codigo = tb_cad_parceiro_negocio.codigo_pais
+    LEFT JOIN estado
+    ON estado.codigo = tb_cad_parceiro_negocio.codigo_estado
+    LEFT JOIN cidade 
+    ON cidade.codigo = tb_cad_parceiro_negocio.codigo_cidade;
+    -- WHERE (p_codigo_estado IS NULL OR cidade.uf = p_codigo_estado);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_stc_combo_cidade` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_stc_combo_cidade`(IN p_codigo_estado INT)
+BEGIN
+    SELECT 
+        cidade.codigo 	AS 	nCodigoCidade,
+        cidade.nome 	AS 	sNomeCidade,
+        cidade.uf		AS 	nUfCidade,
+        estado.nome 	AS 	sNomeEstado,
+        CONCAT(cidade.nome, ' - ', estado.uf) AS sDescricaoCidade
+    FROM cidade
+    LEFT JOIN estado 
+    ON estado.codigo = cidade.uf
+    WHERE (p_codigo_estado IS NULL OR cidade.uf = p_codigo_estado);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_stc_combo_estado` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_stc_combo_estado`()
+BEGIN
+    
+		SELECT 
+			codigo AS nCodigoEstado,
+            nome AS sNomeEstado,
+            uf AS sUf
+        FROM estado;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_stc_combo_pais` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_stc_combo_pais`()
+BEGIN
+    
+		SELECT 
+			codigo AS nCodigoPais,
+            nome_pt AS sNomePais
+        FROM pais;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_stc_select_tipo_parceiro_negocio` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_stc_select_tipo_parceiro_negocio`()
+BEGIN
+    SELECT 
+        tb_stc_tipo_parceiro_negocio.codigo AS nCodigoTipoParceiro,
+        tb_stc_tipo_parceiro_negocio.sigla AS sSiglaTipoParceiro,
+        tb_stc_tipo_parceiro_negocio.descricao AS sTipoParceiro
+    FROM tb_stc_tipo_parceiro_negocio;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_validate_login_signup_senha_hash` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_validate_login_signup_senha_hash`(
+	p_codigo_empresa 	INT,  
+	p_nome_usuario 		VARCHAR(255)
+)
+BEGIN
+
+	SELECT 
+		senha,
+        codigo
+	FROM tb_cad_usuario
+    WHERE nome_usuario = p_nome_usuario
+    AND   codigo_empresa = p_codigo_empresa;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -252,4 +543,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-09 21:29:08
+-- Dump completed on 2025-02-15 12:15:28
