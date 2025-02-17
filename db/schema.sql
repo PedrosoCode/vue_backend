@@ -365,7 +365,10 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_parceiro_negocio`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_parceiro_negocio`(
+	p_codigo_empresa INT,
+    p_nome_parceiro	 VARCHAR(255)
+)
 BEGIN
     SELECT 
         tb_cad_parceiro_negocio.codigo AS nCodigoCidadeParceiro,
@@ -391,13 +394,18 @@ BEGIN
         estado.nome AS sNomeEstadoParceiro,
         pais.nome_pt AS sNomePT
     FROM tb_cad_parceiro_negocio
+    
     LEFT JOIN pais
     ON pais.codigo = tb_cad_parceiro_negocio.codigo_pais
     LEFT JOIN estado
     ON estado.codigo = tb_cad_parceiro_negocio.codigo_estado
     LEFT JOIN cidade 
-    ON cidade.codigo = tb_cad_parceiro_negocio.codigo_cidade;
+    ON cidade.codigo = tb_cad_parceiro_negocio.codigo_cidade
     -- WHERE (p_codigo_estado IS NULL OR cidade.uf = p_codigo_estado);
+    WHERE (tb_cad_parceiro_negocio.razao_social like CONCAT('%', p_nome_parceiro, '%') 
+			OR tb_cad_parceiro_negocio.nome_fantasia like CONCAT('%', p_nome_parceiro, '%')  
+            OR p_nome_parceiro = ''
+		   );
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -543,4 +551,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-15 12:15:28
+-- Dump completed on 2025-02-16 23:46:19

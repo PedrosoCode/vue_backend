@@ -5,6 +5,6 @@ const {
 
 const router = express.Router();
 
-router.get('/pais', getParceiro);
+router.post('/listagem', getParceiro);
 
 module.exports = router;
