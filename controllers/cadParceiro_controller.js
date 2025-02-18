@@ -22,15 +22,12 @@ const getParceiro = async (req, res) => {
 
     // Recebe os dados do corpo da requisição
     const { sNomeParceiro } = req.body;
-    if (!sNomeParceiro) {
-      return res.status(400).json({ error: "Nome do parceiro é obrigatório." });
-    }
 
     // Query SQL para buscar o parceiro
     const execQuery = `CALL sp_select_parceiro_negocio(:p_codigo_empresa, :p_nome_parceiro)`;
 
     // Executa a consulta
-    const [results] = await conn.query(execQuery, {
+    const results = await conn.query(execQuery, {
       replacements: {
         p_codigo_empresa: jwtInfo.jwt_nCodigoEmpresa,
         p_nome_parceiro: sNomeParceiro, // Corrigido: Agora passa o nome do parceiro correto

@@ -162,7 +162,7 @@ CREATE TABLE `tb_cad_parceiro_negocio` (
 
 LOCK TABLES `tb_cad_parceiro_negocio` WRITE;
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` DISABLE KEYS */;
-INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,NULL,NULL);
+INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,NULL,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two','raz teste two','lou','nou','coul','bau','12241000','col',1,5265,26,NULL,NULL);
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -371,24 +371,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_parceiro_negocio`(
 )
 BEGIN
     SELECT 
-        tb_cad_parceiro_negocio.codigo AS nCodigoCidadeParceiro,
-        tb_cad_parceiro_negocio.codigo_empresa AS nCodigoEmpresaParceiro,
-        tb_cad_parceiro_negocio.documento AS sDocumentoParceiro,
-        tb_cad_parceiro_negocio.telefone as sTelefoneParceiro,
-        tb_cad_parceiro_negocio.email AS sEmailParceiro,
-        tb_cad_parceiro_negocio.data_cadastro AS sDataCadastroParceiro,
-        tb_cad_parceiro_negocio.nome_fantasia AS sNomeFantasiaParceiro,
-        tb_cad_parceiro_negocio.razao_social AS sRazaoSocialParceiro,
-        tb_cad_parceiro_negocio.logradouro AS sLogradouro,
-        tb_cad_parceiro_negocio.numero AS sNumeroParceiro,
-        tb_cad_parceiro_negocio.complemento AS sComplementoParceiro,
-        tb_cad_parceiro_negocio.bairro AS sBairroParceiro,
-        tb_cad_parceiro_negocio.cep AS sCepParceiro,
-        tb_cad_parceiro_negocio.contato AS sContatoParceiro,
-        tb_cad_parceiro_negocio.codigo_pais AS nCodigoPaisParceiro,
-        tb_cad_parceiro_negocio.codigo_cidade AS nCodigoEstadoParceiro,
-        tb_cad_parceiro_negocio.codigo_tipo_parceiro AS nCodigoTipoParceiro,
-        tb_cad_parceiro_negocio.data_ultima_alteracao AS sDataUltimaAlteracao,
+        IFNULL(tb_cad_parceiro_negocio.codigo, 0) AS nCodigoCidadeParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_empresa, 0) AS nCodigoEmpresaParceiro,
+        IFNULL(tb_cad_parceiro_negocio.documento, '') AS sDocumentoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.telefone, '') as sTelefoneParceiro,
+        IFNULL(tb_cad_parceiro_negocio.email, '') AS sEmailParceiro,
+        IFNULL(tb_cad_parceiro_negocio.data_cadastro, '') AS sDataCadastroParceiro,
+        IFNULL(tb_cad_parceiro_negocio.nome_fantasia, '') AS sNomeFantasiaParceiro,
+        IFNULL(tb_cad_parceiro_negocio.razao_social, '') AS sRazaoSocialParceiro,
+        IFNULL(tb_cad_parceiro_negocio.logradouro, '') AS sLogradouro,
+        IFNULL(tb_cad_parceiro_negocio.numero, '') AS sNumeroParceiro,
+        IFNULL(tb_cad_parceiro_negocio.complemento, '') AS sComplementoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.bairro, '') AS sBairroParceiro,
+        IFNULL(tb_cad_parceiro_negocio.cep, '') AS sCepParceiro,
+        IFNULL(tb_cad_parceiro_negocio.contato, '') AS sContatoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_pais, 0) AS nCodigoPaisParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_cidade, 0) AS nCodigoEstadoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_tipo_parceiro, 0) AS nCodigoTipoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.data_ultima_alteracao, '') AS sDataUltimaAlteracao,
         CONCAT(cidade.nome, ' - ', estado.uf) AS sDescricaoCidade,
         cidade.nome AS sNomeCidadeParceiro,
         estado.nome AS sNomeEstadoParceiro,
@@ -551,4 +551,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-16 23:46:19
+-- Dump completed on 2025-02-18 19:26:12
