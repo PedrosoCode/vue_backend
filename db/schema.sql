@@ -371,7 +371,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_parceiro_negocio`(
 )
 BEGIN
     SELECT 
-        IFNULL(tb_cad_parceiro_negocio.codigo, 0) AS nCodigoCidadeParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo, 0) AS nCodigoParceiro,
         IFNULL(tb_cad_parceiro_negocio.codigo_empresa, 0) AS nCodigoEmpresaParceiro,
         IFNULL(tb_cad_parceiro_negocio.documento, '') AS sDocumentoParceiro,
         IFNULL(tb_cad_parceiro_negocio.telefone, '') as sTelefoneParceiro,
@@ -406,6 +406,59 @@ BEGIN
 			OR tb_cad_parceiro_negocio.nome_fantasia like CONCAT('%', p_nome_parceiro, '%')  
             OR p_nome_parceiro = ''
 		   );
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_select_parceiro_negocio_dados` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_parceiro_negocio_dados`(
+	p_codigo_empresa INT,
+    p_codigo	     BIGINT
+)
+BEGIN
+    SELECT 
+        IFNULL(tb_cad_parceiro_negocio.codigo, 0) AS nCodigoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_empresa, 0) AS nCodigoEmpresaParceiro,
+        IFNULL(tb_cad_parceiro_negocio.documento, '') AS sDocumentoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.telefone, '') as sTelefoneParceiro,
+        IFNULL(tb_cad_parceiro_negocio.email, '') AS sEmailParceiro,
+        IFNULL(tb_cad_parceiro_negocio.data_cadastro, '') AS sDataCadastroParceiro,
+        IFNULL(tb_cad_parceiro_negocio.nome_fantasia, '') AS sNomeFantasiaParceiro,
+        IFNULL(tb_cad_parceiro_negocio.razao_social, '') AS sRazaoSocialParceiro,
+        IFNULL(tb_cad_parceiro_negocio.logradouro, '') AS sLogradouro,
+        IFNULL(tb_cad_parceiro_negocio.numero, '') AS sNumeroParceiro,
+        IFNULL(tb_cad_parceiro_negocio.complemento, '') AS sComplementoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.bairro, '') AS sBairroParceiro,
+        IFNULL(tb_cad_parceiro_negocio.cep, '') AS sCepParceiro,
+        IFNULL(tb_cad_parceiro_negocio.contato, '') AS sContatoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_pais, 0) AS nCodigoPaisParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_cidade, 0) AS nCodigoEstadoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_tipo_parceiro, 0) AS nCodigoTipoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.data_ultima_alteracao, '') AS sDataUltimaAlteracao,
+        CONCAT(cidade.nome, ' - ', estado.uf) AS sDescricaoCidade,
+        cidade.nome AS sNomeCidadeParceiro,
+        estado.nome AS sNomeEstadoParceiro,
+        pais.nome_pt AS sNomePT
+    FROM tb_cad_parceiro_negocio
+    LEFT JOIN pais
+    ON pais.codigo = tb_cad_parceiro_negocio.codigo_pais
+    LEFT JOIN estado
+    ON estado.codigo = tb_cad_parceiro_negocio.codigo_estado
+    LEFT JOIN cidade 
+    ON cidade.codigo = tb_cad_parceiro_negocio.codigo_cidade
+    WHERE (tb_cad_parceiro_negocio.codigo = p_codigo)
+    AND (tb_cad_parceiro_negocio.codigo_empresa = p_codigo_empresa);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -512,6 +565,113 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_upsert_parceiro_negocio` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_upsert_parceiro_negocio`(    
+		 p_codigo_empresa INT,
+		 p_documento VARCHAR(255),
+		 p_telefone VARCHAR(255),
+		 p_email VARCHAR(255),
+		 p_data_cadastro DATE,
+		 p_nome_fantasia VARCHAR(255),
+		 p_razao_social VARCHAR(255),
+		 p_logradouro VARCHAR(255),
+		 p_numero VARCHAR(255),
+	 	 p_complemento VARCHAR(255),
+		 p_bairro VARCHAR(255),
+		 p_cep VARCHAR(255),
+		 p_contato VARCHAR(255),
+		 p_codigo_pais BIGINT,
+		 p_codigo_cidade BIGINT,
+		 p_codigo_estado BIGINT,
+		 p_codigo_tipo_parceiro INT
+)
+BEGIN
+
+	DECLARE v_codigo INT;
+
+	SET v_codigo = (SELECT 
+						COALESCE(MAX(codigo), 0) + 1
+					FROM tb_cad_parceiro_negocio 
+					WHERE codigo_empresa = p_codigo_empresa
+				   );
+
+	INSERT INTO tb_cad_parceiro_negocio
+		(`codigo`,
+		`codigo_empresa`,
+		`documento`,
+		`telefone`,
+		`email`,
+		`data_cadastro`,
+		`nome_fantasia`,
+		`razao_social`,
+		`logradouro`,
+		`numero`,
+		`complemento`,
+		`bairro`,
+		`cep`,
+		`contato`,
+		`codigo_pais`,
+		`codigo_cidade`,
+		`codigo_estado`,
+		`codigo_tipo_parceiro`,
+		`data_ultima_alteracao`)
+	VALUES
+		(CASE WHEN p_codigo IS NULL THEN v_codigo ELSE p_codigo END,
+		 p_codigo_empresa,
+		 p_documento,
+		 p_telefone,
+		 p_email,
+		 p_data_cadastro,
+		 p_nome_fantasia,
+		 p_razao_social,
+		 p_logradouro,
+		 p_numero,
+	 	 p_complemento,
+		 p_bairro,
+		 p_cep,
+		 p_contato,
+		 p_codigo_pais,
+		 p_codigo_cidade,
+		 p_codigo_estado,
+		 p_codigo_tipo_parceiro,
+		 CURRENT_TIMESTAMP()
+		)
+        ON DUPLICATE KEY UPDATE
+			documento = p_documento,
+			telefone = p_telefone,
+			email = p_email,
+			data_cadastro = p_data_cadastro,
+			nome_fantasia = p_nome_fantasia,
+			razao_social = p_razao_social,
+			logradouro = p_logradouro,
+			numero = p_numero,
+			complemento = p_complemento,
+			bairro = p_bairro,
+			cep = p_cep,
+			contato = p_contato,
+			codigo_pais = p_codigo_pais,
+			codigo_cidade = p_codigo_cidade,
+			codigo_estado = p_codigo_estado,
+			codigo_tipo_parceiro = p_codigo_tipo_parceiro,
+			data_ultima_alteracao = CURRENT_TIMESTAMP()
+			;
+		
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_validate_login_signup_senha_hash` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -551,4 +711,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-18 19:26:12
+-- Dump completed on 2025-02-20 22:00:26
