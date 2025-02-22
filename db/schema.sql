@@ -162,7 +162,7 @@ CREATE TABLE `tb_cad_parceiro_negocio` (
 
 LOCK TABLES `tb_cad_parceiro_negocio` WRITE;
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` DISABLE KEYS */;
-INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,NULL,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two','raz teste two','lou','nou','coul','bau','12241000','col',1,5265,26,NULL,NULL);
+INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two','raz teste two','lou','nou','coul','bau','12241000','col',1,5265,26,2,NULL);
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,8 +443,10 @@ BEGIN
         IFNULL(tb_cad_parceiro_negocio.cep, '') AS sCepParceiro,
         IFNULL(tb_cad_parceiro_negocio.contato, '') AS sContatoParceiro,
         IFNULL(tb_cad_parceiro_negocio.codigo_pais, 0) AS nCodigoPaisParceiro,
-        IFNULL(tb_cad_parceiro_negocio.codigo_cidade, 0) AS nCodigoEstadoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_estado, 0) AS nCodigoEstadoParceiro,
+        IFNULL(tb_cad_parceiro_negocio.codigo_cidade, 0) AS nCodigoCidadeParceiro,
         IFNULL(tb_cad_parceiro_negocio.codigo_tipo_parceiro, 0) AS nCodigoTipoParceiro,
+        IFNULL(tb_stc_tipo_parceiro_negocio.descricao, '')  AS sTipoParceiroNegocio,
         IFNULL(tb_cad_parceiro_negocio.data_ultima_alteracao, '') AS sDataUltimaAlteracao,
         CONCAT(cidade.nome, ' - ', estado.uf) AS sDescricaoCidade,
         cidade.nome AS sNomeCidadeParceiro,
@@ -457,6 +459,8 @@ BEGIN
     ON estado.codigo = tb_cad_parceiro_negocio.codigo_estado
     LEFT JOIN cidade 
     ON cidade.codigo = tb_cad_parceiro_negocio.codigo_cidade
+    LEFT JOIN tb_stc_tipo_parceiro_negocio
+    ON tb_stc_tipo_parceiro_negocio.codigo = tb_cad_parceiro_negocio.codigo_tipo_parceiro
     WHERE (tb_cad_parceiro_negocio.codigo = p_codigo)
     AND (tb_cad_parceiro_negocio.codigo_empresa = p_codigo_empresa);
 END ;;
@@ -711,4 +715,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-20 22:00:26
+-- Dump completed on 2025-02-21 23:08:23
