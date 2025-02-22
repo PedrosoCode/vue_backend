@@ -162,7 +162,7 @@ CREATE TABLE `tb_cad_parceiro_negocio` (
 
 LOCK TABLES `tb_cad_parceiro_negocio` WRITE;
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` DISABLE KEYS */;
-INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two','raz teste two','lou','nou','coul','bau','12241000','col',1,5265,26,2,NULL);
+INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two outro','raz teste two outro','lou','nou','coul','bau','12241000','col',1,5265,26,2,'2025-02-22 15:03:12'),(3,2,'','22222222','maiiil@mailll.com','2025-02-22 15:04:47','tessss','teste','logradr','636','compliments','bairro','12211','cont',1,2426,14,0,'2025-02-22 15:04:47');
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -580,22 +580,22 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_upsert_parceiro_negocio`(    
-		 p_codigo_empresa INT,
-		 p_documento VARCHAR(255),
-		 p_telefone VARCHAR(255),
-		 p_email VARCHAR(255),
-		 p_data_cadastro DATE,
-		 p_nome_fantasia VARCHAR(255),
-		 p_razao_social VARCHAR(255),
-		 p_logradouro VARCHAR(255),
-		 p_numero VARCHAR(255),
-	 	 p_complemento VARCHAR(255),
-		 p_bairro VARCHAR(255),
-		 p_cep VARCHAR(255),
-		 p_contato VARCHAR(255),
-		 p_codigo_pais BIGINT,
-		 p_codigo_cidade BIGINT,
-		 p_codigo_estado BIGINT,
+		 p_codigo				INT,
+		 p_codigo_empresa 		INT,
+		 p_documento 			VARCHAR(255),
+		 p_telefone 			VARCHAR(255),
+		 p_email 				VARCHAR(255),
+		 p_nome_fantasia 		VARCHAR(255),
+		 p_razao_social 		VARCHAR(255),
+		 p_logradouro 			VARCHAR(255),
+		 p_numero 				VARCHAR(255),
+	 	 p_complemento 			VARCHAR(255),
+		 p_bairro 				VARCHAR(255),
+		 p_cep 					VARCHAR(255),
+		 p_contato 				VARCHAR(255),
+		 p_codigo_pais			BIGINT,
+		 p_codigo_cidade 		BIGINT,
+		 p_codigo_estado 		BIGINT,
 		 p_codigo_tipo_parceiro INT
 )
 BEGIN
@@ -609,32 +609,32 @@ BEGIN
 				   );
 
 	INSERT INTO tb_cad_parceiro_negocio
-		(`codigo`,
-		`codigo_empresa`,
-		`documento`,
-		`telefone`,
-		`email`,
-		`data_cadastro`,
-		`nome_fantasia`,
-		`razao_social`,
-		`logradouro`,
-		`numero`,
-		`complemento`,
-		`bairro`,
-		`cep`,
-		`contato`,
-		`codigo_pais`,
-		`codigo_cidade`,
-		`codigo_estado`,
-		`codigo_tipo_parceiro`,
-		`data_ultima_alteracao`)
+		(codigo,
+		 codigo_empresa,
+		 documento,
+		 telefone,
+		 email,
+		 data_cadastro,
+		 nome_fantasia,
+		 razao_social,
+		 logradouro,
+		 numero,
+		 complemento,
+		 bairro,
+		 cep,
+		 contato,
+		 codigo_pais,
+		 codigo_cidade,
+		 codigo_estado,
+		 codigo_tipo_parceiro,
+		 data_ultima_alteracao)
 	VALUES
 		(CASE WHEN p_codigo IS NULL THEN v_codigo ELSE p_codigo END,
 		 p_codigo_empresa,
 		 p_documento,
 		 p_telefone,
 		 p_email,
-		 p_data_cadastro,
+		 CURRENT_TIMESTAMP(),
 		 p_nome_fantasia,
 		 p_razao_social,
 		 p_logradouro,
@@ -650,23 +650,22 @@ BEGIN
 		 CURRENT_TIMESTAMP()
 		)
         ON DUPLICATE KEY UPDATE
-			documento = p_documento,
-			telefone = p_telefone,
-			email = p_email,
-			data_cadastro = p_data_cadastro,
-			nome_fantasia = p_nome_fantasia,
-			razao_social = p_razao_social,
-			logradouro = p_logradouro,
-			numero = p_numero,
-			complemento = p_complemento,
-			bairro = p_bairro,
-			cep = p_cep,
-			contato = p_contato,
-			codigo_pais = p_codigo_pais,
-			codigo_cidade = p_codigo_cidade,
-			codigo_estado = p_codigo_estado,
-			codigo_tipo_parceiro = p_codigo_tipo_parceiro,
-			data_ultima_alteracao = CURRENT_TIMESTAMP()
+			documento				= p_documento,
+			telefone 				= p_telefone,
+			email 					= p_email,
+			nome_fantasia			= p_nome_fantasia,
+			razao_social 			= p_razao_social,
+			logradouro 				= p_logradouro,
+			numero 					= p_numero,
+			complemento 			= p_complemento,
+			bairro 					= p_bairro,
+			cep 					= p_cep,
+			contato 				= p_contato,
+			codigo_pais 			= p_codigo_pais,
+			codigo_cidade 			= p_codigo_cidade,
+			codigo_estado 			= p_codigo_estado,
+			codigo_tipo_parceiro 	= p_codigo_tipo_parceiro,
+			data_ultima_alteracao 	= CURRENT_TIMESTAMP()
 			;
 		
 
@@ -715,4 +714,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-21 23:08:23
+-- Dump completed on 2025-02-22 12:06:52
