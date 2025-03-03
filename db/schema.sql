@@ -99,6 +99,41 @@ INSERT INTO `pais` VALUES (1,'Brazil','Brasil','BR',1058),(2,'Afghanistan','Afeg
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_cad_ativo`
+--
+
+DROP TABLE IF EXISTS `tb_cad_ativo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_cad_ativo` (
+  `codigo` bigint NOT NULL,
+  `codigo_empresa` int NOT NULL,
+  `codigo_maquina` bigint DEFAULT NULL,
+  `codigo_parceiro_negocio` int DEFAULT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `numero_serie` varchar(255) DEFAULT NULL,
+  `observacao` text,
+  `cor` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`codigo`,`codigo_empresa`),
+  KEY `fk_empresa` (`codigo_empresa`),
+  KEY `fk_ativo_maquina` (`codigo_maquina`),
+  KEY `fk_ativo_parceiro` (`codigo_parceiro_negocio`),
+  CONSTRAINT `fk_ativo_maquina` FOREIGN KEY (`codigo_maquina`) REFERENCES `tb_cad_maquina` (`codigo`),
+  CONSTRAINT `fk_ativo_parceiro` FOREIGN KEY (`codigo_parceiro_negocio`) REFERENCES `tb_cad_parceiro_negocio` (`codigo`),
+  CONSTRAINT `fk_empresa` FOREIGN KEY (`codigo_empresa`) REFERENCES `tb_cad_empresa` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_cad_ativo`
+--
+
+LOCK TABLES `tb_cad_ativo` WRITE;
+/*!40000 ALTER TABLE `tb_cad_ativo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_cad_ativo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_cad_empresa`
 --
 
@@ -121,6 +156,89 @@ LOCK TABLES `tb_cad_empresa` WRITE;
 /*!40000 ALTER TABLE `tb_cad_empresa` DISABLE KEYS */;
 INSERT INTO `tb_cad_empresa` VALUES (1,'raz one','fant one'),(2,'raz two','fant two'),(3,'raz three','fant three');
 /*!40000 ALTER TABLE `tb_cad_empresa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_cad_fabricante`
+--
+
+DROP TABLE IF EXISTS `tb_cad_fabricante`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_cad_fabricante` (
+  `codigo` bigint NOT NULL,
+  `codigo_empresa` int NOT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`codigo`,`codigo_empresa`),
+  KEY `fk_fabricante_empresa` (`codigo_empresa`),
+  CONSTRAINT `fk_fabricante_empresa` FOREIGN KEY (`codigo_empresa`) REFERENCES `tb_cad_empresa` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_cad_fabricante`
+--
+
+LOCK TABLES `tb_cad_fabricante` WRITE;
+/*!40000 ALTER TABLE `tb_cad_fabricante` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_cad_fabricante` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_cad_item`
+--
+
+DROP TABLE IF EXISTS `tb_cad_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_cad_item` (
+  `codigo` bigint NOT NULL,
+  `codigo_empresa` int NOT NULL,
+  `codigo_produto_servico` varchar(255) DEFAULT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`codigo`,`codigo_empresa`),
+  KEY `fk_item_empresa` (`codigo_empresa`),
+  CONSTRAINT `fk_item_empresa` FOREIGN KEY (`codigo_empresa`) REFERENCES `tb_cad_empresa` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_cad_item`
+--
+
+LOCK TABLES `tb_cad_item` WRITE;
+/*!40000 ALTER TABLE `tb_cad_item` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_cad_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_cad_maquina`
+--
+
+DROP TABLE IF EXISTS `tb_cad_maquina`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_cad_maquina` (
+  `codigo` bigint NOT NULL,
+  `codigo_empresa` int NOT NULL,
+  `descricao_abreviada` varchar(255) DEFAULT NULL,
+  `descricao_completa` varchar(255) DEFAULT NULL,
+  `codigo_fabricante` bigint DEFAULT NULL,
+  PRIMARY KEY (`codigo`,`codigo_empresa`),
+  KEY `fk_cad_maquina_empresa` (`codigo_empresa`),
+  KEY `fk_maquina_fabricante` (`codigo_fabricante`),
+  CONSTRAINT `fk_cad_maquina_empresa` FOREIGN KEY (`codigo_empresa`) REFERENCES `tb_cad_empresa` (`codigo`),
+  CONSTRAINT `fk_maquina_fabricante` FOREIGN KEY (`codigo_fabricante`) REFERENCES `tb_cad_fabricante` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_cad_maquina`
+--
+
+LOCK TABLES `tb_cad_maquina` WRITE;
+/*!40000 ALTER TABLE `tb_cad_maquina` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_cad_maquina` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -162,7 +280,7 @@ CREATE TABLE `tb_cad_parceiro_negocio` (
 
 LOCK TABLES `tb_cad_parceiro_negocio` WRITE;
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` DISABLE KEYS */;
-INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two outro','raz teste two outro','lou','nou','coul','bau','12241000','col',1,5265,26,2,'2025-02-22 15:03:12'),(3,2,'','22222222','maiiil@mailll.com','2025-02-22 15:04:47','tessss','teste','logradr','636','compliments','bairro','12211','cont',1,2426,14,0,'2025-02-22 15:04:47');
+INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two outro','raz teste two outro','lou','nou','coul','bau','12241000','col',1,5265,26,2,'2025-02-23 15:25:26'),(3,2,'','22222222','maiiil@mailll.com','2025-02-22 15:04:47','tessss','teste','logradr','636','compliments','bairro','12211','cont',1,2426,14,0,'2025-02-23 15:38:39');
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,6 +334,36 @@ LOCK TABLES `tb_hello` WRITE;
 /*!40000 ALTER TABLE `tb_hello` DISABLE KEYS */;
 INSERT INTO `tb_hello` VALUES ('eai!','SETADO!'),('eai!','SETADO!'),('opa!','SETADO!'),('salve!!','SETADO!'),('salve!!','SETADO!'),('novooo!!',NULL),('novooo!!',NULL),('novooo!!',NULL),('novooo!!',NULL);
 /*!40000 ALTER TABLE `tb_hello` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_manutencao_ordem_servico`
+--
+
+DROP TABLE IF EXISTS `tb_manutencao_ordem_servico`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_manutencao_ordem_servico` (
+  `codigo` bigint NOT NULL,
+  `codigo_empresa` int NOT NULL,
+  `codigo_parceiro_negocio` int DEFAULT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `observacao` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`codigo`,`codigo_empresa`),
+  KEY `fk_servico_parceiro` (`codigo_parceiro_negocio`),
+  KEY `fk_servico_empresa` (`codigo_empresa`),
+  CONSTRAINT `fk_servico_empresa` FOREIGN KEY (`codigo_empresa`) REFERENCES `tb_cad_empresa` (`codigo`),
+  CONSTRAINT `fk_servico_parceiro` FOREIGN KEY (`codigo_parceiro_negocio`) REFERENCES `tb_cad_parceiro_negocio` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_manutencao_ordem_servico`
+--
+
+LOCK TABLES `tb_manutencao_ordem_servico` WRITE;
+/*!40000 ALTER TABLE `tb_manutencao_ordem_servico` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_manutencao_ordem_servico` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -714,4 +862,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-22 12:06:52
+-- Dump completed on 2025-03-03  0:45:35
