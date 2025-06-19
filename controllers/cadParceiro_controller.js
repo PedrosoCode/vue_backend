@@ -177,10 +177,50 @@ const upsertParceiro = async (req, res) => {
       }
     });
 
-    res.status(201).json({ message: 'Usuário criado com sucesso!' });
+    res.status(201).json({ message: 'parceiro de negócio criado com sucesso!' });
   } catch (err) {
-    console.error('Erro ao inserir usuário:', err);
-    res.status(500).json({ error: 'Erro ao inserir usuário no banco de dados.' });
+    console.error('Erro ao inserir parceiro de negócio:', err);
+    res.status(500).json({ error: 'Erro ao inserir parceiro de negócio no banco de dados.' });
+  }
+};
+
+const DeleteParceiro = async (req, res) => {
+
+  try {
+
+      const { 
+              nCodigoParceiro
+            } = req.body; 
+
+        const authHeader = req.headers["authorization"];
+        if (!authHeader) {
+          return res.status(401).json({ error: "Token não fornecido." });
+        }
+    
+        const token = authHeader.split(" ")[1];
+        if (!token) {
+          return res.status(401).json({ error: "Token inválido." });
+        }
+    
+        const jwtInfo = jwt.verify(token, process.env.JWT_SECRET);
+        if (!jwtInfo || !jwtInfo.jwt_nCodigoEmpresa) {
+          return res.status(403).json({ error: "Token inválido ou expirado." });
+        }
+
+      const sql = `CALL sp_delete_parceiro_negocio(:p_codigo,
+                                                   :p_codigo_empresa)`;
+
+    await conn.query(sql, {
+      replacements: {
+        p_codigo                : nCodigoParceiro             ,
+        p_codigo_empresa        : jwtInfo.jwt_nCodigoEmpresa  
+      }
+    });
+
+    res.status(201).json({ message: 'exclusão realizada!' });
+  } catch (err) {
+    console.error('Erro ao excluir parceiro de negócio:', err);
+    res.status(500).json({ error: 'Erro ao excluir parceiro de negócio.' });
   }
 };
 
@@ -188,4 +228,5 @@ module.exports = {
   getParceiro,
   getParceiroPorId,
   upsertParceiro,
+  DeleteParceiro
 };

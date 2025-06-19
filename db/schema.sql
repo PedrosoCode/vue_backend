@@ -337,7 +337,7 @@ CREATE TABLE `tb_cad_parceiro_negocio` (
 
 LOCK TABLES `tb_cad_parceiro_negocio` WRITE;
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` DISABLE KEYS */;
-INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two outro','raz teste two outro','lou','nou','coul','bau','12241000','col',1,5265,26,2,'2025-02-23 15:25:26'),(3,2,'','22222222','maiiil@mailll.com','2025-02-22 15:04:47','tessss','teste','logradr','636','compliments','bairro','12211','cont',1,2426,14,0,'2025-02-23 15:38:39');
+INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two outro','raz teste two outro','lou','nou','coul','bau','12241000','col',1,5265,26,2,'2025-02-23 15:25:26'),(3,2,'','22222222','maiiil@mailll.com','2025-02-22 15:04:47','tessss','teste','logradr','636','compliments','bairro','12211','cont',1,2426,14,0,'2025-02-23 15:38:39'),(5,2,'','12992025775','mail@mail.com','2025-06-19 14:50:35','teste','gabriel v22','rua heitor de andrade','252','rua','jardim das industrias ','12241000','gabriel',1,5265,26,0,'2025-06-19 20:24:02');
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -527,6 +527,7 @@ CREATE TABLE `tb_manutencao_necessidade` (
   `status` int DEFAULT NULL,
   `solicitante` varchar(255) DEFAULT NULL,
   `codigo_origem_manutencao` int DEFAULT NULL,
+  `codigo_tipo_manutencao` int DEFAULT NULL,
   PRIMARY KEY (`codigo`,`codigo_empresa`),
   KEY `fk_manutencao_necessidade_parceiro_negocio` (`codigo_parceiro_negocio`,`codigo_empresa`),
   KEY `fk_manutencao_necessidade_ativo` (`codigo_ativo`,`codigo_empresa`),
@@ -591,9 +592,11 @@ CREATE TABLE `tb_manutencao_ordem` (
   `codigo_origem_manutencao` int DEFAULT NULL,
   `hora_inicio` time DEFAULT NULL,
   `hora_termino` time DEFAULT NULL,
+  `codigo_tipo_manutencao` int DEFAULT NULL,
   PRIMARY KEY (`codigo`,`codigo_empresa`),
   KEY `fk_manutencao_ordem_parceiro_negocio` (`codigo_parceiro_negocio`,`codigo_empresa`),
   KEY `fk_manutencao_ordem_ativo` (`codigo_ativo`,`codigo_empresa`),
+  KEY `fk_manutencao_ordem_origem_necessidade` (`codigo_nm_origem`,`codigo_empresa`),
   CONSTRAINT `fk_manutencao_ordem_ativo` FOREIGN KEY (`codigo_ativo`, `codigo_empresa`) REFERENCES `tb_cad_ativo` (`codigo`, `codigo_empresa`),
   CONSTRAINT `fk_manutencao_ordem_parceiro_negocio` FOREIGN KEY (`codigo_parceiro_negocio`, `codigo_empresa`) REFERENCES `tb_cad_parceiro_negocio` (`codigo`, `codigo_empresa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -688,6 +691,60 @@ LOCK TABLES `tb_manutencao_ordem_tecnico` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_ordem_servico_material`
+--
+
+DROP TABLE IF EXISTS `tb_ordem_servico_material`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_ordem_servico_material` (
+  `codigo` bigint NOT NULL,
+  `codigo_ordem_servico` bigint NOT NULL,
+  `codigo_empresa` int NOT NULL,
+  `codigo_item` bigint DEFAULT NULL,
+  PRIMARY KEY (`codigo`,`codigo_ordem_servico`,`codigo_empresa`),
+  KEY `fk__manutencao_ordem_item` (`codigo_item`,`codigo_empresa`),
+  CONSTRAINT `fk__manutencao_ordem_item` FOREIGN KEY (`codigo_item`, `codigo_empresa`) REFERENCES `tb_cad_item` (`codigo`, `codigo_empresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_ordem_servico_material`
+--
+
+LOCK TABLES `tb_ordem_servico_material` WRITE;
+/*!40000 ALTER TABLE `tb_ordem_servico_material` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_ordem_servico_material` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_ordem_servico_servico`
+--
+
+DROP TABLE IF EXISTS `tb_ordem_servico_servico`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_ordem_servico_servico` (
+  `codigo` bigint NOT NULL,
+  `codigo_ordem_servico` bigint NOT NULL,
+  `codigo_empresa` int NOT NULL,
+  `codigo_servico` bigint DEFAULT NULL,
+  PRIMARY KEY (`codigo`,`codigo_ordem_servico`,`codigo_empresa`),
+  KEY `fk__manutencao_ordem_servico` (`codigo_servico`,`codigo_empresa`),
+  CONSTRAINT `fk__manutencao_ordem_servico` FOREIGN KEY (`codigo_servico`, `codigo_empresa`) REFERENCES `tb_cad_servico` (`codigo`, `codigo_empresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_ordem_servico_servico`
+--
+
+LOCK TABLES `tb_ordem_servico_servico` WRITE;
+/*!40000 ALTER TABLE `tb_ordem_servico_servico` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_ordem_servico_servico` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_stc_origem_manutencao`
 --
 
@@ -757,6 +814,29 @@ INSERT INTO `tb_stc_status_necessidade_manutencao` VALUES (1,'ABERTA'),(2,'EM AN
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_stc_tipo_manutencao`
+--
+
+DROP TABLE IF EXISTS `tb_stc_tipo_manutencao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_stc_tipo_manutencao` (
+  `codigo` int DEFAULT NULL,
+  `descricao` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_stc_tipo_manutencao`
+--
+
+LOCK TABLES `tb_stc_tipo_manutencao` WRITE;
+/*!40000 ALTER TABLE `tb_stc_tipo_manutencao` DISABLE KEYS */;
+INSERT INTO `tb_stc_tipo_manutencao` VALUES (1,'PREVENTIVA'),(2,'REATIVA'),(4,'CORRETIVA'),(3,'PREDITIVA');
+/*!40000 ALTER TABLE `tb_stc_tipo_manutencao` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_stc_tipo_parceiro_negocio`
 --
 
@@ -801,6 +881,32 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_create_hello`(IN p_hello VARCHAR(255))
 BEGIN
     INSERT INTO tb_hello (hi) VALUES (p_hello);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_delete_parceiro_negocio` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_parceiro_negocio`(
+	p_codigo 			INT,
+    p_codigo_empresa 	INT
+)
+BEGIN
+
+	DELETE FROM tb_cad_parceiro_negocio
+    WHERE 	codigo_empresa = p_codigo_empresa
+    AND 	codigo = p_codigo;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1252,4 +1358,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-19  0:15:18
+-- Dump completed on 2025-06-19 18:37:21
