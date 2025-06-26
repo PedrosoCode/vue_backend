@@ -2,6 +2,9 @@
 const jwt = require('jsonwebtoken');
 
 const validateJWT = (req, res, next) => {
+
+      try {
+        
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -9,7 +12,7 @@ const validateJWT = (req, res, next) => {
         return res.status(401).json({ message: 'Acesso não autorizado. Token não fornecido.' });
     }
 
-    try {
+  
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
         req.user = {

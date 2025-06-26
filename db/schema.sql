@@ -211,6 +211,7 @@ CREATE TABLE `tb_cad_fabricante` (
 
 LOCK TABLES `tb_cad_fabricante` WRITE;
 /*!40000 ALTER TABLE `tb_cad_fabricante` DISABLE KEYS */;
+INSERT INTO `tb_cad_fabricante` VALUES (1,2,'yamaha'),(2,2,'samsung'),(3,2,'cartech');
 /*!40000 ALTER TABLE `tb_cad_fabricante` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -337,7 +338,7 @@ CREATE TABLE `tb_cad_parceiro_negocio` (
 
 LOCK TABLES `tb_cad_parceiro_negocio` WRITE;
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` DISABLE KEYS */;
-INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two outro','raz teste two outro','lou','nou','coul','bau','12241000','col',1,5265,26,2,'2025-02-23 15:25:26'),(3,2,'','22222222','maiiil@mailll.com','2025-02-22 15:04:47','tessss','teste','logradr','636','compliments','bairro','12211','cont',1,2426,14,0,'2025-02-23 15:38:39'),(5,2,'','12992025775','mail@mail.com','2025-06-19 14:50:35','teste','gabriel v22','rua heitor de andrade','252','rua','jardim das industrias ','12241000','gabriel',1,5265,26,0,'2025-06-19 20:24:02');
+INSERT INTO `tb_cad_parceiro_negocio` VALUES (1,2,'52852852816','12992025775','mail@enterprisemail.com',NULL,'fant teste one','raz teste one','lograd','numer','compl','bar','12240000','cont',1,5265,26,1,NULL),(2,2,'48848848848','12995055778','mail@teste.com',NULL,'fant teste two outro','raz teste two outro','lou','nou','coul','bau','12241000','col',1,5265,26,2,'2025-02-23 15:25:26');
 /*!40000 ALTER TABLE `tb_cad_parceiro_negocio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -978,6 +979,34 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_select_cadastro_geral_fabricante` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_cadastro_geral_fabricante`(
+    p_nome_fabricante 		VARCHAR(255),
+    p_codigo_empresa	 	INT
+)
+BEGIN
+    SELECT 
+        codigo AS rIcodigo,
+        codigo_empresa AS rIcodigoEmpresa,
+        descricao AS rSdescricao
+    FROM tb_cad_fabricante
+    WHERE (codigo_empresa = p_codigo_empresa)
+      AND (descricao = p_nome_fabricante OR p_nome_fabricante = '');
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_select_login_signup_combo_empresa` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1358,4 +1387,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-19 18:37:21
+-- Dump completed on 2025-06-25 23:07:52
