@@ -211,7 +211,7 @@ CREATE TABLE `tb_cad_fabricante` (
 
 LOCK TABLES `tb_cad_fabricante` WRITE;
 /*!40000 ALTER TABLE `tb_cad_fabricante` DISABLE KEYS */;
-INSERT INTO `tb_cad_fabricante` VALUES (1,2,'yamaha'),(2,2,'samsung'),(3,2,'cartech');
+INSERT INTO `tb_cad_fabricante` VALUES (1,2,'yamaha3'),(2,2,'samsung'),(3,2,'cartech');
 /*!40000 ALTER TABLE `tb_cad_fabricante` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -933,6 +933,46 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_insert_cadastro_geral_fabricante` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_cadastro_geral_fabricante`(
+	p_nome_fabricante 		VARCHAR(255),
+    p_codigo_empresa	 	INT
+)
+BEGIN
+
+	DECLARE v_codigo INT;
+    SET v_codigo =  (
+				    	SELECT
+							IFNULL(MAX(codigo) , 0) + 1
+						FROM tb_cad_fabricante
+                        WHERE codigo_empresa = p_codigo_empresa
+					);
+
+	INSERT INTO tb_cad_fabricante (
+		codigo,
+        codigo_empresa,
+        descricao
+    ) VALUES (
+		v_codigo,
+        p_codigo_empresa,
+        p_nome_fabricante
+    );
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_insert_login_signup_cadastro` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1242,6 +1282,34 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_update_cadastro_geral_fabricante` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_cadastro_geral_fabricante`(
+	p_codigo_fabricante		INT,
+	p_nome_fabricante 		VARCHAR(255),
+    p_codigo_empresa	 	INT
+)
+BEGIN
+
+	UPDATE tb_cad_fabricante
+    SET descricao = p_nome_fabricante
+    WHERE codigo_empresa = p_codigo_empresa
+    AND   codigo = p_codigo_fabricante;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_upsert_parceiro_negocio` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1387,4 +1455,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-25 23:07:52
+-- Dump completed on 2025-06-26 23:27:06
