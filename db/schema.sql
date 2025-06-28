@@ -211,7 +211,7 @@ CREATE TABLE `tb_cad_fabricante` (
 
 LOCK TABLES `tb_cad_fabricante` WRITE;
 /*!40000 ALTER TABLE `tb_cad_fabricante` DISABLE KEYS */;
-INSERT INTO `tb_cad_fabricante` VALUES (1,2,'yamaha3'),(2,2,'samsung'),(3,2,'cartech');
+INSERT INTO `tb_cad_fabricante` VALUES (1,2,'samsung');
 /*!40000 ALTER TABLE `tb_cad_fabricante` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -415,6 +415,7 @@ CREATE TABLE `tb_cad_tecnico` (
 
 LOCK TABLES `tb_cad_tecnico` WRITE;
 /*!40000 ALTER TABLE `tb_cad_tecnico` DISABLE KEYS */;
+INSERT INTO `tb_cad_tecnico` VALUES (1,2,'Anakin','Darth Vader');
 /*!40000 ALTER TABLE `tb_cad_tecnico` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -888,6 +889,58 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_delete_cadastro_geral_fabricante` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_cadastro_geral_fabricante`(
+	p_codigo_fabricante		INT,
+    p_codigo_empresa		INT
+)
+BEGIN
+	
+    DELETE FROM tb_cad_fabricante
+    WHERE codigo = p_codigo_fabricante
+    AND codigo_empresa = p_codigo_empresa;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_delete_cadastro_geral_tecnico` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_cadastro_geral_tecnico`(
+    p_codigo			INT,
+    p_codigo_empresa	INT
+)
+BEGIN
+	
+	DELETE FROM tb_cad_tecnico
+    WHERE codigo = p_codigo
+    AND   codigo_empresa = p_codigo_empresa;
+	
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_delete_parceiro_negocio` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -973,6 +1026,48 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_insert_cadastro_geral_tecnico` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_cadastro_geral_tecnico`(
+	p_codigo_empresa	INT,
+    p_nome				VARCHAR(255),
+    p_nome_completo		VARCHAR(255)
+)
+BEGIN
+	
+    DECLARE v_codigo INT;
+    SET v_codigo = 	(
+						SELECT IFNULL(MAX(codigo), 0) + 1
+                        FROM tb_cad_tecnico
+                        WHERE codigo_empresa = p_codigo_empresa
+					);
+	
+    INSERT INTO tb_cad_tecnico(
+		codigo,
+		codigo_empresa,
+		nome,
+		nome_completo
+	) VALUES (
+		v_codigo,
+		p_codigo_empresa,
+		p_nome,
+		p_nome_completo
+	);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_insert_login_signup_cadastro` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1041,6 +1136,36 @@ BEGIN
     FROM tb_cad_fabricante
     WHERE (codigo_empresa = p_codigo_empresa)
       AND (descricao = p_nome_fabricante OR p_nome_fabricante = '');
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_select_cadastro_geral_tecnico` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_cadastro_geral_tecnico`(
+    IN p_apelido         VARCHAR(255), 
+    IN p_nome_completo   VARCHAR(255), 
+    IN p_codigo_empresa  INT
+)
+BEGIN
+    SELECT 
+        codigo AS nCodigoTecnico,
+        nome AS sApelido,
+        nome_completo AS sNomeCompleto
+    FROM tb_cad_tecnico
+    WHERE codigo_empresa = p_codigo_empresa
+      AND (nome_completo LIKE CONCAT('%', p_nome_completo, '%') OR p_nome_completo = '')
+      AND (nome LIKE CONCAT('%', p_apelido, '%') OR p_apelido = '');
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1310,6 +1435,36 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_update_cadastro_geral_tecnico` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_cadastro_geral_tecnico`(
+	p_nome				VARCHAR(255),
+    p_nome_completo		VARCHAR(255),
+    p_codigo			INT,
+    p_codigo_empresa	INT
+)
+BEGIN
+	
+	UPDATE tb_cad_tecnico SET
+		nome = p_nome,
+		nome_completo = p_nome_completo
+    WHERE (codigo_empresa = p_codigo_empresa)
+    AND   (codgo = p_codigo);
+	
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_upsert_parceiro_negocio` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1455,4 +1610,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-26 23:27:06
+-- Dump completed on 2025-06-28 17:29:32

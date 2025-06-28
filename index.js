@@ -16,6 +16,7 @@ const loginSignupRoutes = require('./routes/loginSignUp_route');
 const genericRoutes = require('./routes/generic_route');
 const cadParceiroRoutes = require('./routes/cadParceiro_route');
 const cadFabricanteRoutes = require('./routes/cadFabricante_route');
+const cadTecnicoRoutes = require('./routes/cadTecnico_route')
 
 app.use(cors())
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +26,7 @@ app.use('/loginsignup', loginSignupRoutes);
 app.use('/genericos', genericRoutes);
 app.use('/cadparceiros', cadParceiroRoutes);
 app.use('/fabricante', cadFabricanteRoutes);
+app.use('/tecnico', cadTecnicoRoutes)
 
 
 app.listen(3042, () => {
