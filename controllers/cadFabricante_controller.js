@@ -85,9 +85,32 @@ const atualizarFabricante = async (req, res) => {
   }
 };
 
+const deletarFabricante = async (req, res) => {
+  try {
+
+    const { nCodigoFabricante } = req.body;
+
+    const execQuery = `CALL sp_delete_cadastro_geral_fabricante(:p_codigo_fabricante, :p_codigo_empresa)`;
+
+    const results = await conn.query(execQuery, {
+      replacements: {
+        p_codigo_fabricante: nCodigoFabricante,
+        p_codigo_empresa: req.user.codigoEmpresa,
+      },
+    });
+
+    return res.status(200).json(results);
+
+  } catch (err) {
+    console.error("Erro ao deletar fabricante:", err);
+
+    return res.status(500).json({ error: "Erro ao deletar fabricante no banco de dados." });
+  }
+};
 
 module.exports = {
   listaFabricante,
   novoFabricante,
-  atualizarFabricante
+  atualizarFabricante,
+  deletarFabricante
 };
