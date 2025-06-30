@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `vue_cmms` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `vue_cmms`;
--- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.42, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: vue_cmms
 -- ------------------------------------------------------
--- Server version	8.0.42
+-- Server version	8.0.42-0ubuntu0.24.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -415,7 +415,7 @@ CREATE TABLE `tb_cad_tecnico` (
 
 LOCK TABLES `tb_cad_tecnico` WRITE;
 /*!40000 ALTER TABLE `tb_cad_tecnico` DISABLE KEYS */;
-INSERT INTO `tb_cad_tecnico` VALUES (1,2,'Anakin','Darth Vader');
+INSERT INTO `tb_cad_tecnico` VALUES (1,2,'Ben','Obi-Wan Kenobi');
 /*!40000 ALTER TABLE `tb_cad_tecnico` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1457,7 +1457,7 @@ BEGIN
 		nome = p_nome,
 		nome_completo = p_nome_completo
     WHERE (codigo_empresa = p_codigo_empresa)
-    AND   (codgo = p_codigo);
+    AND   (codigo = p_codigo);
 	
 END ;;
 DELIMITER ;
@@ -1610,4 +1610,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-28 17:29:32
+-- Dump completed on 2025-06-29 21:06:03

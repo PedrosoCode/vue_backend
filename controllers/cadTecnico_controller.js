@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const conn = require("../db/conn");
 
 const listaTecnico = async (req, res) => {
-  try {
+  try { 
 
     let { sNomeTecnico,
           sNomeCompletoTecnico
