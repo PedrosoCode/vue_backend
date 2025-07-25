@@ -78,9 +78,30 @@ const getTipoParceiro = async (req, res) => {
   }
 };
 
+const loadComboParceiroNegocio = async (req, res) => {
+  try { 
+
+    const execQuery = `CALL sp_select_combo_parceiro_negocio(:p_codigo_empresa)`;
+
+    const results = await conn.query(execQuery, {
+      replacements: {
+        p_codigo_empresa: req.user.codigoEmpresa
+      },
+    })
+
+    return res.status(200).json(results);
+
+  } catch (err) {
+    console.error("Erro ao buscar parceiros de negócio:", err);
+
+    return res.status(500).json({ error: "Erro ao buscar parceiros de negócio no banco de dados." });
+  };
+};
+
 module.exports = {
   getPais,
   getCidade,
   getEstado,
-  getTipoParceiro
+  getTipoParceiro,
+  loadComboParceiroNegocio
 };
